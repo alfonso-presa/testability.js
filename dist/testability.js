@@ -6,7 +6,7 @@
   if (typeof define === 'function' && define.amd) {
     // AMD. Register as an anonymous module unless amdModuleId is set
     define([], function () {
-      return (factory());
+      return (root['testability'] = factory());
     });
   } else if (typeof exports === 'object') {
     // Node. Does not work with strict CommonJS, but
@@ -14,14 +14,13 @@
     // like Node.
     module.exports = factory();
   } else {
-    factory();
+    root['testability'] = factory();
   }
 }(this, function () {
 
 'use strict';
 
 /*exported testability*/
-
 var testability = (function Testability () {
 
     if (!this || this.constructor !==  Testability) {
@@ -64,5 +63,6 @@ var testability = (function Testability () {
 
 })();
 
+return testability;
 
 }));
