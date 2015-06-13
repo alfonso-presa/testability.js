@@ -1,0 +1,12 @@
+default:
+  - build
+
+build:
+  - clean
+  - jshint:lib
+  - jscs:lib
+  - lintspaces:lib
+  - karma
+  - umd
+  - concat
+  - uglify
