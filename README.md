@@ -57,9 +57,9 @@ testability.wait.oneLess(); //When async process is completed
 
 ## WIP
 
-Theres two projects in progress (not public jet):
-- One to provide an "protractor adapter" so that frameworks diferent from angular could use testability.js spec to be tested with protractor.
-- Another to provide an "angular adapter" to enable angular testing with testing frameworks following testability.js spec.
+Theres two projects in progress:
+- [protractor-testability-plugin](https://github.com/alfonso-presa/protractor-testability-plugin): provides an "protractor adapter" so that frameworks diferent from angular could use testability.js spec to be tested with protractor.
+- Another (not yet public) to provide an "angular adapter" to enable angular testing with testing frameworks following testability.js spec.
 
 ## License
 
