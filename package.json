@@ -1,6 +1,6 @@
 {
   "name": "testability.js",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Independent browser testability state provider",
   "main": "dist/testability.js",
   "readmeFilename": "README.md",

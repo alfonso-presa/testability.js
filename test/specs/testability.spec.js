@@ -14,29 +14,44 @@ describe('testability.js', function () {
 	});
 
 	function genericSpecs (asyncTask) {
-		it('should trigger the callback when task ends correctly, but not before', function (done) {
-			var jobDone = false;
-			asyncTask(function () {
-				jobDone = true;
-			});
-			testability.when.ready(function () {
-				expect(jobDone).toBeTruthy();
-				done();
-			});
-		});
+        it('should trigger the callback when task ends correctly, but not before', function (done) {
+            var jobDone = false;
+            asyncTask(function () {
+                jobDone = true;
+            });
+            testability.when.ready(function () {
+                expect(jobDone).toBeTruthy();
+                done();
+            });
+        });
 
-		it('should not trigger the callback when tasks are chained', function (done) {
-			var allDone = false;
-			asyncTask(function () {
-				asyncTask(function () {
-					allDone = true;
-				});
-			});
-			testability.when.ready(function () {
-				expect(allDone).toBeTruthy();
-				done();
-			});
-		});
+        it('should not trigger the callback when tasks are chained', function (done) {
+            var allDone = false;
+            asyncTask(function () {
+                asyncTask(function () {
+                    allDone = true;
+                });
+            });
+            testability.when.ready(function () {
+                expect(allDone).toBeTruthy();
+                done();
+            });
+        });
+
+        describe('readyFor', function () {
+            it('should trigger the callback when task ends correctly, but not before', function (done) {
+                var jobDone = false;
+                asyncTask(function () {
+                    jobDone = true;
+                });
+                testability.when.readyFor(1000, function () {
+                    expect(jobDone).toBeTruthy();
+                    done();
+                });
+            });
+
+            it('should not trigger the callback when new task started in waiting window');
+        });
 	}
 
 	describe('counter handling', function () {

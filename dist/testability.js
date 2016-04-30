@@ -1,6 +1,6 @@
-/*! testability.js - v0.0.0
- *  Release on: 2015-06-13
- *  Copyright (c) 2015 Alfonso Presa
+/*! testability.js - v0.2.0
+ *  Release on: 2016-04-29
+ *  Copyright (c) 2016 Alfonso Presa
  *  Licensed MIT */
 (function (root, factory) {
   if (typeof define === 'function' && define.amd) {
@@ -38,6 +38,20 @@ var testability = (function Testability () {
             else {
                 pendingCallbacks.push(callback);
             }
+        },
+
+        readyFor: function (time, callback) {
+            this.ready(function () {
+                setTimeout(function () {
+                    var stillDone = (pendingCount === 0);
+                    if (stillDone) {
+                        callback();
+                    }
+                    else {
+                        this.readyFor(time, callback);
+                    }
+                }, time);
+            });
         }
     };
 
