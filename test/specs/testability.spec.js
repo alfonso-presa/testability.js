@@ -40,6 +40,10 @@ describe('testability.js', function () {
 	}
 
     function readyForSpecs (asyncTask) {
+        beforeEach(function(done) {
+            testability.when.ready(function () { done(); });
+        });
+
         it('should trigger the callback when task ends correctly, but not before', function (done) {
             var jobDone = false;
             asyncTask(function () {
@@ -92,7 +96,35 @@ describe('testability.js', function () {
             }, 1500);
         });
 
-        it('should restart waiting another task has been completed during waiting time');
+        it('should not trigger the callback when another task has been completed during waiting time', function(done) {
+            var callbackCalled = false;
+
+            testability.when.readyFor(2000, function () {
+                callbackCalled = true;
+            });
+
+            asyncTask(function () {}, 1000);
+
+            setTimeout(function() {
+                expect(callbackCalled).toBeFalsy();
+                done();
+            }, 2500);
+        });
+
+        it('should restart waiting when another task has been completed during waiting time', function(done) {
+            var callbackCalled = false;
+
+            testability.when.readyFor(2000, function () {
+                callbackCalled = true;
+            });
+
+            asyncTask(function () {}, 1000);
+
+            setTimeout(function() {
+                expect(callbackCalled).toBeTruthy();
+                done();
+            }, 4500);
+        });
     }
 
 	describe('counter handling', function () {

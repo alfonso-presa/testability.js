@@ -1,5 +1,5 @@
 /*! testability.js - v0.2.0
- *  Release on: 2016-04-29
+ *  Release on: 2016-05-11
  *  Copyright (c) 2016 Alfonso Presa
  *  Licensed MIT */
 (function (root, factory) {
@@ -30,6 +30,9 @@ var testability = (function Testability () {
     var pendingCount = 0;
     var pendingCallbacks = [];
 
+    var lastTaskCompleted;
+    var currentTime = function () { return new Date().getTime(); };
+
     this.when = {
         ready: function (callback) {
             if (pendingCount === 0) {
@@ -40,17 +43,27 @@ var testability = (function Testability () {
             }
         },
 
-        readyFor: function (time, callback) {
-            this.ready(function () {
+        readyFor: function (delay, callback) {
+            var self = this;
+            self.ready(function () {
                 setTimeout(function () {
-                    var stillDone = (pendingCount === 0);
+                    var stillDone = false;
+
+                    if (lastTaskCompleted) {
+                        var time = currentTime();
+                        var timeSinceLastTask = time - lastTaskCompleted;
+                        if (timeSinceLastTask >= delay) {
+                            stillDone = true;
+                        }
+                    }
+
                     if (stillDone) {
                         callback();
                     }
                     else {
-                        this.readyFor(time, callback);
+                        self.readyFor(delay, callback);
                     }
-                }, time);
+                }, delay);
             });
         }
     };
@@ -58,10 +71,12 @@ var testability = (function Testability () {
     this.wait = {
         oneMore: function () {
             pendingCount += 1;
+            lastTaskCompleted = null;
         },
         oneLess: function () {
             pendingCount -= 1;
             if (pendingCount === 0) {
+                lastTaskCompleted = currentTime();
                 setTimeout(function () {
                     while (pendingCount === 0 && pendingCallbacks.length !== 0) {
                         pendingCallbacks.pop()();
@@ -74,7 +89,6 @@ var testability = (function Testability () {
             promise.then(this.oneLess).catch(this.oneLess);
         }
     };
-
 })();
 
 return testability;
