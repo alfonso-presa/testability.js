@@ -38,6 +38,13 @@ testability.when.ready(function () {
 });
 ```
 
+If you need to make sure that no new action has started in specified time period:
+```js
+testability.when.readyFor(timeInMs, function () {
+	//keep on
+});
+```
+
 When starting an asynchronous tasks the runtime framework, library or application should:
 
 ```js

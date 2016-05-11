@@ -14,39 +14,131 @@ describe('testability.js', function () {
 	});
 
 	function genericSpecs (asyncTask) {
-		it('should trigger the callback when task ends correctly, but not before', function (done) {
-			var jobDone = false;
-			asyncTask(function () {
-				jobDone = true;
-			});
-			testability.when.ready(function () {
-				expect(jobDone).toBeTruthy();
-				done();
-			});
-		});
+        it('should trigger the callback when task ends correctly, but not before', function (done) {
+            var jobDone = false;
+            asyncTask(function () {
+                jobDone = true;
+            });
+            testability.when.ready(function () {
+                expect(jobDone).toBeTruthy();
+                done();
+            });
+        });
 
-		it('should not trigger the callback when tasks are chained', function (done) {
-			var allDone = false;
-			asyncTask(function () {
-				asyncTask(function () {
-					allDone = true;
-				});
-			});
-			testability.when.ready(function () {
-				expect(allDone).toBeTruthy();
-				done();
-			});
-		});
+        it('should not trigger the callback when tasks are chained', function (done) {
+            var allDone = false;
+            asyncTask(function () {
+                asyncTask(function () {
+                    allDone = true;
+                });
+            });
+            testability.when.ready(function () {
+                expect(allDone).toBeTruthy();
+                done();
+            });
+        });
 	}
 
+    function readyForSpecs (asyncTask) {
+        beforeEach(function(done) {
+            testability.when.ready(function () { done(); });
+        });
+
+        it('should trigger the callback when task ends correctly, but not before', function (done) {
+            var jobDone = false;
+            asyncTask(function () {
+                jobDone = true;
+            });
+            testability.when.readyFor(1000, function () {
+                expect(jobDone).toBeTruthy();
+                done();
+            });
+        });
+
+        it('should trigger the callback after specified delay', function (done) {
+            var callbackCalled = false;
+
+            testability.when.readyFor(1000, function () {
+                callbackCalled = true;
+            });
+
+            setTimeout(function() {
+                expect(callbackCalled).toBeTruthy();
+                done();
+            }, 1000);
+        });
+
+        it('should not trigger the callback before specified delay', function (done) {
+            var callbackCalled = false;
+
+            testability.when.readyFor(1000, function () {
+                callbackCalled = true;
+            });
+
+            setTimeout(function() {
+                expect(callbackCalled).toBeFalsy();
+                done();
+            }, 999);
+        });
+
+        it('should not trigger the callback when another task has been started', function(done) {
+            var callbackCalled = false;
+
+            testability.when.readyFor(1000, function () {
+                callbackCalled = true;
+            });
+
+            asyncTask(function () {}, 2000);
+
+            setTimeout(function() {
+                expect(callbackCalled).toBeFalsy();
+                done();
+            }, 1500);
+        });
+
+        it('should not trigger the callback when another task has been completed during waiting time', function(done) {
+            var callbackCalled = false;
+
+            testability.when.readyFor(2000, function () {
+                callbackCalled = true;
+            });
+
+            asyncTask(function () {}, 1000);
+
+            setTimeout(function() {
+                expect(callbackCalled).toBeFalsy();
+                done();
+            }, 2500);
+        });
+
+        it('should restart waiting when another task has been completed during waiting time', function(done) {
+            var callbackCalled = false;
+
+            testability.when.readyFor(2000, function () {
+                callbackCalled = true;
+            });
+
+            asyncTask(function () {}, 1000);
+
+            setTimeout(function() {
+                expect(callbackCalled).toBeTruthy();
+                done();
+            }, 4500);
+        });
+    }
+
 	describe('counter handling', function () {
-		genericSpecs(function asyncTask (callback) {
-			testability.wait.oneMore();
-			setTimeout(function () {
-				testability.wait.oneLess();
-				callback();
-			});
-		});
+        function asyncTask (callback, delay) {
+            testability.wait.oneMore();
+            setTimeout(function () {
+                testability.wait.oneLess();
+                callback();
+            }, delay);
+        }
+
+		genericSpecs(asyncTask);
+
+        readyForSpecs(asyncTask);
 	});
 
 	describe('promises handling', function () {

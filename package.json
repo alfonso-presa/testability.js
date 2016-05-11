@@ -1,6 +1,6 @@
 {
   "name": "testability.js",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Independent browser testability state provider",
   "main": "dist/testability.js",
   "readmeFilename": "README.md",
@@ -26,13 +26,16 @@
     "grunt-groc": "^0.4.5",
     "grunt-jscs": "^1.1.0",
     "grunt-karma": "^0.11.0",
-    "grunt-lintspaces": "^0.5.1",
+    "grunt-lintspaces": "^0.7.4",
     "grunt-umd": "^2.3.0",
+    "jasmine-core": "^2.4.1",
     "jit-grunt": "^0.7.0",
     "jshint-stylish": "^0.2.0",
+    "karma": "^0.12.37",
     "karma-jasmine": "*",
     "karma-phantomjs-launcher": "*",
     "load-grunt-config": "^0.10.0",
+    "phantomjs-prebuilt": "^2.1.7",
     "time-grunt": "^0.3.2"
   }
 }

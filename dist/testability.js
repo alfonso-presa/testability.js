@@ -1,6 +1,6 @@
-/*! testability.js - v0.0.0
- *  Release on: 2015-06-13
- *  Copyright (c) 2015 Alfonso Presa
+/*! testability.js - v0.2.0
+ *  Release on: 2016-05-11
+ *  Copyright (c) 2016 Alfonso Presa
  *  Licensed MIT */
 (function (root, factory) {
   if (typeof define === 'function' && define.amd) {
@@ -30,6 +30,9 @@ var testability = (function Testability () {
     var pendingCount = 0;
     var pendingCallbacks = [];
 
+    var lastTaskCompleted;
+    var currentTime = function () { return new Date().getTime(); };
+
     this.when = {
         ready: function (callback) {
             if (pendingCount === 0) {
@@ -38,16 +41,42 @@ var testability = (function Testability () {
             else {
                 pendingCallbacks.push(callback);
             }
+        },
+
+        readyFor: function (delay, callback) {
+            var self = this;
+            self.ready(function () {
+                setTimeout(function () {
+                    var stillDone = false;
+
+                    if (lastTaskCompleted) {
+                        var time = currentTime();
+                        var timeSinceLastTask = time - lastTaskCompleted;
+                        if (timeSinceLastTask >= delay) {
+                            stillDone = true;
+                        }
+                    }
+
+                    if (stillDone) {
+                        callback();
+                    }
+                    else {
+                        self.readyFor(delay, callback);
+                    }
+                }, delay);
+            });
         }
     };
 
     this.wait = {
         oneMore: function () {
             pendingCount += 1;
+            lastTaskCompleted = null;
         },
         oneLess: function () {
             pendingCount -= 1;
             if (pendingCount === 0) {
+                lastTaskCompleted = currentTime();
                 setTimeout(function () {
                     while (pendingCount === 0 && pendingCallbacks.length !== 0) {
                         pendingCallbacks.pop()();
@@ -60,7 +89,6 @@ var testability = (function Testability () {
             promise.then(this.oneLess).catch(this.oneLess);
         }
     };
-
 })();
 
 return testability;
