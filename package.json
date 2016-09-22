@@ -16,7 +16,7 @@
     "node": ">= 0.10.0"
   },
   "scripts": {
-    "test": "grunt karma"
+    "test": "./node_modules/.bin/karma start test/karma.conf.js"
   },
   "devDependencies": {
     "grunt": "^0.4.5",
