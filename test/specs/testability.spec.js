@@ -91,4 +91,14 @@ describe('testability.js', function () {
 			return defer.promise;
 		});
 	});
+
+  describe('task api handling', function () {
+		genericSpecs(function asyncTask (callback) {
+			var wait = testability.wait.start();
+			setTimeout(function () {
+				wait.end();
+				callback();
+			});
+		});
+	});
 });

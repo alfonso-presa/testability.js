@@ -44,15 +44,14 @@ When starting an asynchronous tasks the runtime framework, library or applicatio
 testability.wait.for(myPromise);
 ```
 
-Or (this one is not recommended):
+Or it can also do this:
 
 ```js
-testability.wait.oneMore();
+var task = testability.wait.start();
 //....
 //Do some async stuff here
 //....
-testability.wait.oneLess(); //When async process is completed
-
+task.end();
 ```
 
 ## WIP

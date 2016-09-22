@@ -1,4 +1,4 @@
-/*! testability.js - v0.1.0
+/*! testability.js - v0.2.0
  *  Release on: 2016-09-22
  *  Copyright (c) 2016 Alfonso Presa
  *  Licensed MIT */
@@ -42,6 +42,15 @@ var testability = (function Testability () {
     };
 
     this.wait = {
+        start: function () {
+            var self = this;
+            this.oneMore();
+            return {
+                end: function () {
+                    self.oneLess();
+                }
+            };
+        },
         oneMore: function () {
             pendingCount += 1;
         },
