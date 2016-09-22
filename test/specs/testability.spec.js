@@ -13,6 +13,24 @@ describe('testability.js', function () {
 		expect(callback).toHaveBeenCalled();
 	});
 
+	it('should trigger the callback when oneLess has been called and oneMore has not', function () {
+		var callback = jasmine.createSpy('callback');
+		testability.wait.oneLess();
+		testability.when.ready(callback);
+		expect(callback).toHaveBeenCalled();
+	});
+
+	it('should trigger the callback when oneLess has been called before oneMore', function () {
+		var callback = jasmine.createSpy('callback');
+		testability.wait.oneLess();
+		testability.wait.oneLess();
+		testability.wait.oneLess();
+		testability.wait.oneMore();
+		testability.wait.oneLess();
+		testability.when.ready(callback);
+		expect(callback).toHaveBeenCalled();
+	});
+
 	function genericSpecs (asyncTask) {
 		it('should trigger the callback when task ends correctly, but not before', function (done) {
 			var jobDone = false;
@@ -41,6 +59,19 @@ describe('testability.js', function () {
 
 	describe('counter handling', function () {
 		genericSpecs(function asyncTask (callback) {
+			testability.wait.oneMore();
+			setTimeout(function () {
+				testability.wait.oneLess();
+				callback();
+			});
+		});
+	});
+
+	describe('counter handling with negative pending before adding to pending', function () {
+		genericSpecs(function asyncTask (callback) {
+			testability.wait.oneLess();
+			testability.wait.oneLess();
+			testability.wait.oneLess();
 			testability.wait.oneMore();
 			setTimeout(function () {
 				testability.wait.oneLess();

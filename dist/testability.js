@@ -1,6 +1,6 @@
-/*! testability.js - v0.0.0
- *  Release on: 2015-06-13
- *  Copyright (c) 2015 Alfonso Presa
+/*! testability.js - v0.1.0
+ *  Release on: 2016-09-22
+ *  Copyright (c) 2016 Alfonso Presa
  *  Licensed MIT */
 (function (root, factory) {
   if (typeof define === 'function' && define.amd) {
@@ -47,6 +47,9 @@ var testability = (function Testability () {
         },
         oneLess: function () {
             pendingCount -= 1;
+            if (pendingCount < 0) {
+                pendingCount = 0;
+            }
             if (pendingCount === 0) {
                 setTimeout(function () {
                     while (pendingCount === 0 && pendingCallbacks.length !== 0) {
