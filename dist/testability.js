@@ -1,5 +1,5 @@
 /*! testability.js - v0.2.0
- *  Release on: 2016-09-22
+ *  Release on: 2016-10-08
  *  Copyright (c) 2016 Alfonso Presa
  *  Licensed MIT */
 (function (root, factory) {
@@ -29,6 +29,11 @@ var testability = (function Testability () {
 
     var pendingCount = 0;
     var pendingCallbacks = [];
+
+    this.reset = function () {
+        pendingCount = 0;
+        pendingCallbacks = [];
+    };
 
     this.when = {
         ready: function (callback) {
@@ -60,11 +65,9 @@ var testability = (function Testability () {
                 pendingCount = 0;
             }
             if (pendingCount === 0) {
-                setTimeout(function () {
-                    while (pendingCount === 0 && pendingCallbacks.length !== 0) {
-                        pendingCallbacks.pop()();
-                    }
-                });
+                while (pendingCount === 0 && pendingCallbacks.length !== 0) {
+                    pendingCallbacks.pop()();
+                }
             }
         },
         for: function (promise) {
