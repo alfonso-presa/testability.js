@@ -1,4 +1,4 @@
-/*! testability.js - v0.3.0
+/*! testability.js - v0.3.1
  *  Release on: 2016-10-11
  *  Copyright (c) 2016 Alfonso Presa
  *  Licensed MIT */
