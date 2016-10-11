@@ -1,5 +1,5 @@
-/*! testability.js - v0.2.0
- *  Release on: 2016-10-08
+/*! testability.js - v0.3.0
+ *  Release on: 2016-10-11
  *  Copyright (c) 2016 Alfonso Presa
  *  Licensed MIT */
 (function (root, factory) {
@@ -52,7 +52,10 @@ var testability = (function Testability () {
             this.oneMore();
             return {
                 end: function () {
-                    self.oneLess();
+                    if (self) {
+                        self.oneLess();
+                    }
+                    self = undefined;
                 }
             };
         },

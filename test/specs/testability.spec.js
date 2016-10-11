@@ -88,6 +88,7 @@ describe('testability.js', function () {
 			setTimeout(function () {
 				callback();
 				wait.end();
+				wait.end();
 			});
 		});
 	});
