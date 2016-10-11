@@ -1,3 +1,13 @@
+<a name"0.3.1"></a>
+### 0.3.1 (2016-10-11)
+
+
+#### Bug Fixes
+
+* Should not use setTimeout as it's only meant to report testability state ([8f3c51dd](https://github.com/alfonso-presa/testability.js/commit/8f3c51dd))
+* **tasks:** Avoid task end to be invoked several times ([07b311e3](https://github.com/alfonso-presa/testability.js/commit/07b311e3))
+
+
 <a name"0.3.0"></a>
 ## 0.3.0 (2016-10-08)
 
